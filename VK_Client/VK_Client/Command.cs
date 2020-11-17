@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace VK_Client
 {
-    public class Backend
+    public class InitializingCommand : ICommand
     {
-        static async Task dowork(string[] args)
+        public bool CanExecute(object parameter)
         {
-            Console.WriteLine("Enter the service token here:");
-            var serviceToken = Console.ReadLine();
-            var appId = 7663498;
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            const string serviceToken = "8142f9b08142f9b08142f9b0218136017b881428142f9b0def180d31df95a534d47611b";
+            const int appId = 7665867;
             var client = new VkClient(serviceToken, appId);
             Console.WriteLine("Enter your id:");
             try
             {
                 var id = int.Parse(Console.ReadLine() ?? "");
-                var friendsOnline = await client.GetOnlineFriends(id);
+                var friendsOnline = client.GetOnlineFriends(id);
                 Console.WriteLine("Online friends");
                 foreach (var friend in friendsOnline)
                 {
@@ -31,5 +36,7 @@ namespace VK_Client
                 return;
             }
         }
+
+        public event EventHandler CanExecuteChanged;
     }
 }
